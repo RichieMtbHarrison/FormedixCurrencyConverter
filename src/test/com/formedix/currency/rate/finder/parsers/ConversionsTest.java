@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.time.format.DateTimeParseException;
 
 import static com.formedix.currency.rate.finder.parsers.Conversions.convertToBigDecimal;
-import static com.formedix.currency.rate.finder.parsers.Conversions.getRecordDate;
+import static com.formedix.currency.rate.finder.parsers.Conversions.getLocalDateFromString;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ConversionsTest
@@ -43,7 +43,7 @@ public class ConversionsTest
         final String stringDate = "2021-07-27";
 
         //WHEN / THEN
-        assertNotNull(getRecordDate.apply(stringDate));
+        assertNotNull(getLocalDateFromString.apply(stringDate));
     }
 
     @Test
@@ -53,6 +53,6 @@ public class ConversionsTest
         final String stringDate = "27-07-2021";
 
         //WHEN / THEN
-        assertThrows(DateTimeParseException.class, () -> getRecordDate.apply(stringDate));
+        assertThrows(DateTimeParseException.class, () -> getLocalDateFromString.apply(stringDate));
     }
 }
