@@ -10,7 +10,7 @@ public interface CurrencyRateFinder
 {
     /**
      * @param date A single date period in which to search, format required "yyyy-MM-dd"
-     * @return If the date provided is in range then returns a list of Currencies and associated rates otherwise an empty Optional
+     * @return If the date provided is in range then returns an Immutable list of Currencies and associated rates otherwise an empty Optional
      * @throws CurrencyRateFinderException If date provided is not of correct format.
      */
     Optional<List<CurrencyData>> getAllRatesForGivenDate(final String date) throws CurrencyRateFinderException;
