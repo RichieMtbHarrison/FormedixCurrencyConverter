@@ -6,16 +6,16 @@ import com.formedix.currency.rate.finder.test.common.CommonTestData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
-import static com.formedix.currency.rate.finder.parsers.Conversions.*;
-import static java.math.BigDecimal.ZERO;
+import static com.formedix.currency.rate.finder.constants.Constants.MINUS_ONE_DOUBLE;
+import static java.lang.Double.valueOf;
+import static java.util.Optional.of;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CalculateExchangeAmountHandlerTest extends CommonTestData
 {
-    private RateHandler<BigDecimal> testee;
+    private RateHandler<Double> testee;
 
     private static final String DATE_PERIOD = "2021-07-27";
     private static final String AMOUNT = "1000";
@@ -35,7 +35,8 @@ class CalculateExchangeAmountHandlerTest extends CommonTestData
         final String DATE_PERIOD = "27-07-2021";
 
         //WHEN / THEN
-        assertThrows(InvalidDateFormatException.class, () -> testee.handleRequest(new RequestData(referenceData, DATE_PERIOD, sourceCurrency, targetCurrency, AMOUNT)));
+        assertThrows(InvalidDateFormatException.class, () -> testee.handleRequest(new RequestData(referenceData,
+                DATE_PERIOD, sourceCurrency, targetCurrency, AMOUNT)));
     }
 
     @Test
@@ -46,11 +47,12 @@ class CalculateExchangeAmountHandlerTest extends CommonTestData
         final String invalidTargetCurrency = "CHR";
 
         //WHEN
-        BigDecimal result = testee.handleRequest(new RequestData(referenceData, DATE_PERIOD, sourceCurrency, invalidTargetCurrency, AMOUNT));
+        Double result = testee.handleRequest(new RequestData(referenceData, DATE_PERIOD, sourceCurrency,
+                invalidTargetCurrency, AMOUNT));
 
         //THEN
         assertNotNull(result);
-        assertEquals(result, ZERO);
+        assertEquals(MINUS_ONE_DOUBLE, result);
     }
 
     @Test
@@ -61,32 +63,34 @@ class CalculateExchangeAmountHandlerTest extends CommonTestData
         final String notApplicableTargetCurrency = "CYP";
 
         //WHEN
-        BigDecimal result = testee.handleRequest(new RequestData(referenceData, DATE_PERIOD, sourceCurrency, notApplicableTargetCurrency, AMOUNT));
+        Double result = testee.handleRequest(new RequestData(referenceData, DATE_PERIOD, sourceCurrency,
+                notApplicableTargetCurrency, AMOUNT));
 
         //THEN
         assertNotNull(result);
-        assertEquals(result, ZERO);
+        assertEquals(MINUS_ONE_DOUBLE, result);
     }
 
     @Test
     void convertAmountForSpecifiedDateAndValidCurrencies() throws InvalidDateFormatException
     {
         //GIVEN
-        final String targetExchangeRate = "0.85503";
-        final String sourceExchangeRate = "129.98";
-
-        Optional<BigDecimal> seRate = convertToBigDecimal.apply(sourceExchangeRate);
-        Optional<BigDecimal> teRate = convertToBigDecimal.apply(targetExchangeRate);
-        Optional<BigDecimal> sbdAmount = convertToBigDecimal.apply(AMOUNT);
-        BigDecimal expectedResult = multiplyRateValueByAmount.apply(divideTwoRates.apply(teRate.get(), seRate.get()), sbdAmount.get());
-
         final String sourceCurrency = "JPY";
         final String targetCurrency = "GBP";
 
         //WHEN
-        BigDecimal result = testee.handleRequest(new RequestData(referenceData, DATE_PERIOD, sourceCurrency, targetCurrency, AMOUNT));
+        Double result = testee.handleRequest(new RequestData(referenceData, DATE_PERIOD, sourceCurrency,
+                targetCurrency, AMOUNT));
 
         //THEN
+        final double targetExchangeRate = 0.85503D;
+        final double sourceExchangeRate = 129.98D;
+        
+        Optional<Double> seRate = of(sourceExchangeRate);
+        Optional<Double> teRate = of(targetExchangeRate);
+        Optional<Double> sbdAmount = of(valueOf(AMOUNT));
+        Double expectedResult = (teRate.get() / seRate.get()) * sbdAmount.get();
+
         assertNotNull(result);
         assertEquals(result, expectedResult);
     }

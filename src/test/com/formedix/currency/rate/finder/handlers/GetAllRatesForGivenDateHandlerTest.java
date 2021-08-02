@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Optional;
 
-import static com.formedix.currency.rate.finder.parsers.Conversions.currencyMatches;
+import static com.formedix.currency.rate.finder.parsers.Conversions.currenciesMatch;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GetAllRatesForGivenDateHandlerTest extends CommonTestData
@@ -60,7 +60,7 @@ class GetAllRatesForGivenDateHandlerTest extends CommonTestData
                                                                             .equals(expectedRate.getCurrency()))
                                                 .findFirst();
         assertTrue(o.isPresent());
-        assertTrue(currencyMatches.apply(o.get(), rate));
+        assertTrue(currenciesMatch.apply(o.get(), rate));
     }
 
 }

@@ -15,7 +15,7 @@ import java.util.function.Function;
 
 import static com.formedix.currency.rate.finder.constants.Constants.COMMA_DELIMITER;
 import static com.formedix.currency.rate.finder.constants.Constants.DATE_FORMATTER;
-import static com.formedix.currency.rate.finder.parsers.Conversions.convertToBigDecimal;
+import static com.formedix.currency.rate.finder.parsers.Conversions.convertToDouble;
 import static java.util.Collections.unmodifiableMap;
 
 public final class FileParser
@@ -50,7 +50,7 @@ public final class FileParser
     {
         List<CurrencyData> referenceData = new ArrayList<>();
         for (int i = 1; i < recordValues.length; i++) {
-            referenceData.add(new CurrencyData(currencies[i], convertToBigDecimal.apply(recordValues[i])));
+            referenceData.add(new CurrencyData(currencies[i], convertToDouble.apply(recordValues[i])));
         }
         return referenceData;
     }

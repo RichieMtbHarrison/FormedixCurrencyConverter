@@ -1,6 +1,7 @@
 package com.formedix.currency.rate.finder.parsers;
 
 import com.formedix.currency.rate.finder.models.CurrencyData;
+import com.formedix.currency.rate.finder.test.common.CommonTestData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,10 +11,9 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class FileParserTest
+public class FileParserTest extends CommonTestData
 {
     private FileParser testee;
-    private static final String VALID_TEST_RESOURCE = "src/test/resources/eurofxref-hist.csv";
 
     @BeforeEach
     void setUp()

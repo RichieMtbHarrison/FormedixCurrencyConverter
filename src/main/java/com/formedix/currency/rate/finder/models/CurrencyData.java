@@ -1,25 +1,23 @@
 package com.formedix.currency.rate.finder.models;
 
-import java.math.BigDecimal;
-import java.util.Optional;
 import java.util.function.Function;
 
 public final class CurrencyData
 {
     private final String currency;
-    private final Optional<BigDecimal> rate;
+    private final Double rate;
 
     public String getCurrency()
     {
         return currency;
     }
 
-    public Optional<BigDecimal> getRate()
+    public Double getRate()
     {
         return rate;
     }
 
-    public CurrencyData(final String currency, Optional<BigDecimal> rate)
+    public CurrencyData(final String currency, Double rate)
     {
         this.currency = currency;
         this.rate = rate;
@@ -32,13 +30,7 @@ public final class CurrencyData
             return false;
         }
         CurrencyData rateToCompare = (CurrencyData) other;
-        if (rateToCompare.getRate()
-                         .isPresent() && this.rate.isPresent()) {
-            return currenciesMatch.apply(rateToCompare) && ratesMatch.apply(rateToCompare);
-        } else {
-            return rateToCompare.getCurrency()
-                                .equals(this.getCurrency());
-        }
+        return currenciesMatch.apply(rateToCompare) && ratesMatch.apply(rateToCompare);
     }
 
     @Override
@@ -48,7 +40,7 @@ public final class CurrencyData
         if (null != currency) {
             result = 18 * result + currency.hashCode();
         }
-        if (rate.isPresent()) {
+        if (null != rate) {
             result = 15 * result + rate.hashCode();
         }
         return result;
@@ -56,8 +48,7 @@ public final class CurrencyData
 
     private final Function<CurrencyData, Boolean> currenciesMatch = (reference) -> reference.getCurrency()
                                                                                             .equalsIgnoreCase(this.getCurrency());
+
     private final Function<CurrencyData, Boolean> ratesMatch = (reference) -> reference.getRate()
-                                                                                       .get()
-                                                                                       .equals(this.getRate()
-                                                                                                   .get());
+                                                                                       .equals(this.getRate());
 }

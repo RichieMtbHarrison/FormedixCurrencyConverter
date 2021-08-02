@@ -4,7 +4,8 @@ import org.junit.jupiter.api.Test;
 
 import java.time.format.DateTimeParseException;
 
-import static com.formedix.currency.rate.finder.parsers.Conversions.convertToBigDecimal;
+import static com.formedix.currency.rate.finder.constants.Constants.MINUS_ONE_DOUBLE;
+import static com.formedix.currency.rate.finder.parsers.Conversions.convertToDouble;
 import static com.formedix.currency.rate.finder.parsers.Conversions.getLocalDateFromString;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,21 +20,21 @@ public class ConversionsTest
         String n3 = "1360.75";
 
         //WHEN / THEN
-        assertNotNull(convertToBigDecimal.apply(n1));
-        assertNotNull(convertToBigDecimal.apply(n2));
-        assertNotNull(convertToBigDecimal.apply(n3));
+        assertNotNull(convertToDouble.apply(n1));
+        assertNotNull(convertToDouble.apply(n2));
+        assertNotNull(convertToDouble.apply(n3));
     }
 
     @Test
     void convertsToNullForInvalidValue()
     {
         //GIVEN
-        String n4 = "-1360.75";
+        String negative = "-1360.75";
         String na = "N/A";
 
         //WHEN / THEN
-        assertNull(convertToBigDecimal.apply(n4));
-        assertNull(convertToBigDecimal.apply(na));
+        assertEquals(MINUS_ONE_DOUBLE, convertToDouble.apply(negative));
+        assertEquals(MINUS_ONE_DOUBLE, convertToDouble.apply(na));
     }
 
     @Test
